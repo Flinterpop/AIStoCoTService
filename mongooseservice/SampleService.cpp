@@ -26,6 +26,9 @@ void MongooseServiceInitialize();
 void MongooseServiceMainLoop();
 void MongooseServiceShutdown();
 
+void StartAISandCOT();
+void StopAISandCOT();
+
 
 CSampleService::CSampleService(PWSTR pszServiceName, 
                                BOOL fCanStop, 
@@ -85,6 +88,7 @@ void CSampleService::OnStart(DWORD dwArgc, LPWSTR *lpszArgv)
     // Log a service start message to the Application log.
     WriteEventLogEntry((PWSTR)L"CppWindowsService in OnStart", EVENTLOG_INFORMATION_TYPE);
 
+    StartAISandCOT();
     MongooseServiceInitialize();
 
     // Queue the main service function for execution in a worker thread.
@@ -131,6 +135,10 @@ void CSampleService::ServiceWorkerThread(void)
 //
 void CSampleService::OnStop()
 {
+
+    StopAISandCOT();
+
+
     // Log a service stop message to the Application log.
     WriteEventLogEntry((PWSTR)L"CppWindowsService in OnStop", EVENTLOG_INFORMATION_TYPE);
 
