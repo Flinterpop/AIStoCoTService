@@ -1,2 +1,2 @@
-# AIStoCoTService
-Listens forAIS on Serial Port and converts it to CoT messages
+# MongooseServiceDemo
+Mongoose embedded webserver running as a windows server
