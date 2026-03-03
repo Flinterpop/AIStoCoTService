@@ -50,6 +50,8 @@ void StartAISandCOT()
 
 	std::string retVal = COTSENDER::StartCOTSender();
 
+	
+	
 	//TEST
 	std::vector<std::string> nmeaList;
 	nmeaList.push_back("!AIVDM,1,1,,A,1Cu?etPjh0KT>H@I;dL1hVv00000,0*57");

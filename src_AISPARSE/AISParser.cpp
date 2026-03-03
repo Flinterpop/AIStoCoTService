@@ -598,3 +598,12 @@ std::string AIS_PARSER::getAISPayloadFromNMEA(std::string NMEA_String)
     }
 }
 
+std::string GetAISStatus()
+{
+    std::stringstream ss{};
+    ss << std::format("KnownVesselList size: {}\r\n", (int)AIS_PARSER::KnownVesselList.size());
+    ss << std::format("MarineIDList size: {}\r\n", (int)AIS_PARSER::MarineIDList.size());
+    ss << std::format("AIS ID 1,2,3 \tCount: {}\r\n", AIS_PARSER::MsgCounts[1]);
+
+    return ss.str();
+}

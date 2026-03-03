@@ -2,6 +2,10 @@
 
 
 #include "mongoose.h"  
+#include <string>
+
+
+std::string GetAISStatus();
 
 
 //based on webUI push
@@ -80,6 +84,8 @@ static void event_handler(struct mg_connection* c, int ev, void* ev_data)
 }
 
 
+
+
 // Push to all watchers
 static void push(struct mg_mgr* mgr, const char* name, const void* data)
 {
@@ -99,8 +105,13 @@ static void timer_fn(void* arg)
 	if (0 == connCount) return;
 	puts("Sending");
 	struct mg_mgr* mgr = (struct mg_mgr*)arg;
+	
+	
 	char buf[150];
 	mg_snprintf(buf, sizeof(buf), "[%d, %s , %d]", MMSI, "Canada", connCount);
+	std::string status = GetAISStatus();
+
+	push(mgr, "Rx AIS", status.c_str());
 	push(mgr, "Rx AIS", buf);
 }
 
