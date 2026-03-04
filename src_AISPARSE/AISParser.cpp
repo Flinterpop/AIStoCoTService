@@ -9,11 +9,14 @@
 #include <string>
 
 
-//extern std::mutex mtxMapEntityList;
+#ifdef IMGUI_VERSION_NUM
+extern std::mutex mtxMapEntityList;
+extern std::vector<MapEntity*> m_MapEntityList;
+#else
 std::mutex mtxMapEntityList;
-
-//extern 
 std::vector<MapEntity*> m_MapEntityList;
+#endif
+
 
 //std::vector<AISVessel*> AISVesselList;
 std::vector<AIS_PARSER::KnownVessel*> AIS_PARSER::KnownVesselList;
