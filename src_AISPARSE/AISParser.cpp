@@ -9,6 +9,9 @@
 #include <string>
 
 
+extern std::mutex mtxMapEntityList;
+//extern std::vector<MapEntity*> m_MapEntityList;
+
 std::mutex mtxMapEntityList;
 std::vector<MapEntity*> m_MapEntityList;
 
@@ -18,6 +21,21 @@ std::map <int, std::string> AIS_PARSER::MarineIDList;  //Marine Identifier D..
 
 int AIS_PARSER::MsgCounts[27]{};
 int AIS_PARSER::MsgFailCounts[27]{};
+
+
+std::string getSIDC(int mmsi)
+{
+    std::string SIDC = "SNSPXM------CAG";
+
+    if (316 == (mmsi) / 1000000) SIDC = "SFSPXM------CAG";
+    if (273 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
+    if (412 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
+    if (413 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
+    if (414 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
+    if (416 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
+    if (477 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
+    return SIDC;
+}
 
 bool AIS_PARSER::LoadKnownVesselList()
 {
@@ -267,6 +285,7 @@ AISObject * AIS_PARSER::ParseAIS5IdentPayload(std::string AISPayload, int fillbi
         {
             v = new AISVessel(a5);
             v->mmsi = a5->mmsi;
+            v->SIDC = getSIDC(v->mmsi);
             v->callsign = a5->callsign;
             v->name = a5->name;
             v->type_and_cargo = a5->type_and_cargo;
@@ -279,6 +298,7 @@ AISObject * AIS_PARSER::ParseAIS5IdentPayload(std::string AISPayload, int fillbi
         else //just update the thing
         {
             v->ais5 = a5;
+            v->SIDC = getSIDC(v->mmsi);
             v->callsign = a5->callsign;
             v->name = a5->name;
             v->type_and_cargo = a5->type_and_cargo;
@@ -308,6 +328,7 @@ AISObject* AIS_PARSER::ParseAIS24IdentPayload(std::string AISPayload, int fillbi
         {
             v = new AISVessel(a24);
             v->mmsi = a24->mmsi;
+            v->SIDC = getSIDC(v->mmsi);
             v->callsign = a24->callsign;
             v->name = a24->name;
             v->type_and_cargo = a24->type_and_cargo;
@@ -320,6 +341,7 @@ AISObject* AIS_PARSER::ParseAIS24IdentPayload(std::string AISPayload, int fillbi
         else //just update the thing
         {
             v->ais24 = a24;
+            v->SIDC = getSIDC(v->mmsi);
             v->callsign = a24->callsign;
             v->name = a24->name;
             v->type_and_cargo = a24->type_and_cargo;
@@ -330,6 +352,7 @@ AISObject* AIS_PARSER::ParseAIS24IdentPayload(std::string AISPayload, int fillbi
     }
     return nullptr;
 }
+
 
 
 AISObject * AIS_PARSER::ParseAIS123_PosReportPayload(std::string AISPayload, int fillbits)
@@ -348,8 +371,8 @@ AISObject * AIS_PARSER::ParseAIS123_PosReportPayload(std::string AISPayload, int
         if (nullptr == v)
         {
             v = new AISVessel(a123);
-            v->SIDC = "SNSPXM------CAG";
             v->mmsi = a123->mmsi;
+            v->SIDC = getSIDC(v->mmsi);
             v->nav_status = a123->nav_status;
             v->cog = a123->cog;
             v->sog = a123->sog;
@@ -358,13 +381,6 @@ AISObject * AIS_PARSER::ParseAIS123_PosReportPayload(std::string AISPayload, int
             v->EntityLng = a123->position.lng_deg;
             v->timestamp = a123->timestamp;
             v->CountryFromMIDCode = AIS_PARSER::FindCountryFromMIDCode(v->mmsi);
-            if (316 == (v->mmsi)/ 1000000) v->SIDC = "SFSPXM------CAG";
-            if (273 == (v->mmsi) / 1000000) v->SIDC = "SHSPXM------CAG";
-            if (412 == (v->mmsi) / 1000000) v->SIDC = "SHSPXM------CAG";
-            if (413 == (v->mmsi) / 1000000) v->SIDC = "SHSPXM------CAG";
-            if (414 == (v->mmsi) / 1000000) v->SIDC = "SHSPXM------CAG";
-            if (416 == (v->mmsi) / 1000000) v->SIDC = "SHSPXM------CAG";
-            if (477 == (v->mmsi) / 1000000) v->SIDC = "SHSPXM------CAG";
             //AISVesselList.push_back(v);
             std::lock_guard<std::mutex> lock(mtxMapEntityList); // Acquires the lock
             m_MapEntityList.push_back((MapEntity *)v);
@@ -373,6 +389,7 @@ AISObject * AIS_PARSER::ParseAIS123_PosReportPayload(std::string AISPayload, int
         else //just update the thing
         {
             v->a123 = a123;
+            v->SIDC = getSIDC(v->mmsi);
             v->nav_status = a123->nav_status;
             v->cog = a123->cog;
             v->sog = a123->sog;
@@ -422,8 +439,8 @@ AISObject * AIS_PARSER::ParseAIS18_PosReportPayload(std::string AISPayload, int 
         if (nullptr == v)
         {
             v = new AISVessel(a18);
-            v->SIDC = "SNSPXM------CAG";
             v->mmsi = a18->mmsi;
+            v->SIDC = getSIDC(v->mmsi);
             //v->nav_status = -1;// a18->nav_status;
             v->true_heading = a18->true_heading;
             v->EntityLat = a18->position.lat_deg;
@@ -431,13 +448,7 @@ AISObject * AIS_PARSER::ParseAIS18_PosReportPayload(std::string AISPayload, int 
             v->timestamp = a18->timestamp;
 
             v->CountryFromMIDCode = AIS_PARSER::FindCountryFromMIDCode(v->mmsi);
-            if (316 == (v->mmsi) / 1000000) v->SIDC = "SFSPXM------CAG";
-            if (273 == (v->mmsi) / 1000000) v->SIDC = "SHSPXM------CAG";
-            if (412 == (v->mmsi) / 1000000) v->SIDC = "SHSPXM------CAG";
-            if (413 == (v->mmsi) / 1000000) v->SIDC = "SHSPXM------CAG";
-            if (414 == (v->mmsi) / 1000000) v->SIDC = "SHSPXM------CAG";
-            if (416 == (v->mmsi) / 1000000) v->SIDC = "SHSPXM------CAG";
-            if (477 == (v->mmsi) / 1000000) v->SIDC = "SHSPXM------CAG";
+            v->SIDC = getSIDC(v->mmsi);
             //AISVesselList.push_back(v);
             std::lock_guard<std::mutex> lock(mtxMapEntityList); // Acquires the lock
             m_MapEntityList.push_back((MapEntity*)v);
