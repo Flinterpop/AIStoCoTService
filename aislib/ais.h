@@ -427,6 +427,7 @@ class AisBitset : protected std::bitset<MAX_BITS> {
 class AisMsg {
  public:
      std::string BGNote{};
+
   int message_id = 0;
   int repeat_indicator = 0;
   int mmsi = 0;
