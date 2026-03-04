@@ -19,7 +19,7 @@ class MapEntity
 
 public:
 	int GUID{};
-	enum trackType TT {};
+	enum trackType trackType {};
 
 	double EntityLat = 0;
 	double EntityLng = 0;
@@ -45,10 +45,15 @@ public:
 	
 	bool bShowLocateACLine = false; //when true a line from the TrackBlock to AC is shown
 
-	MapEntity() {};
+	MapEntity(){};
 	
 
+
+#ifdef IMGUI_VERSION_NUM
 	virtual void Draw() {};
+#endif
+
+	
 
 
 	virtual void EntityIsClicked() 

@@ -97,6 +97,7 @@ namespace AIS_PARSER
             auto split_view = NMEA_Sentence | std::ranges::views::split(',');
             for (const auto& view : split_view) fields.push_back(std::string(view.begin(), view.end()));
             //for (const std::string& fields : fields) std::cout << fields << std::endl;
+
             if (fields.size() != 7)
             {
                 parseRecordString = "Incorrect number of fields";
@@ -125,10 +126,21 @@ namespace AIS_PARSER
             char FB = fields[6][0];
             fillBits = FB - 0x30;
 
-            std::string c = fields[6].substr(2);
+            try
+            {
+                std::string c = fields[6].substr(2);  //caused crash
+                isInt = isStringAnInteger(c);
+                if (isInt) checksum = std::stoi(c);
+                //we don't do anythign with it..
+            }
+            catch (...)
+            {
 
-            isInt = isStringAnInteger(c);
-            if (isInt) checksum = std::stoi(c);
+            }
+            
+
+            
+            
 
             parseRecordString = retVal.str();
             isValid = true;
@@ -161,10 +173,12 @@ namespace AIS_PARSER
         int A{}, B{}, C{}, D{};  //dimensions
         int TypeOfShip{};  //from AIS Message 5
         std::string flag{};
-        std::string symbol{};
+        std::string symbol{}; //SIDC
         std::string ShipNumber{};  //example: FFH-339
+        std::string SIDC{};
+   
 
-        KnownVessel(int mmsi, int imo, std::string _name, std::string cs, int _TypeOfShip, std::string _symbol, std::string _flag, int a, int b, int c, int d,std::string shipNumber)
+        KnownVessel(int mmsi, int imo, std::string _name, std::string cs, int _TypeOfShip, std::string _symbol, std::string _flag, int a, int b, int c, int d,std::string shipNumber,std::string _SIDC)
         {
             MMSI = mmsi;
             IMO = imo;
@@ -178,6 +192,7 @@ namespace AIS_PARSER
             flag = _flag;  //Country of registration
             symbol = _symbol;
             ShipNumber = shipNumber;
+            SIDC = _SIDC;
         };
     };
 

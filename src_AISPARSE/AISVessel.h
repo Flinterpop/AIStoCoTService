@@ -256,11 +256,12 @@ public:
     }
 
 
+#ifdef IMGUI_VERSION_NUM
     void Draw() override;
     void DrawSymbol();
     void TrackBlock(int tc = 5);
     void DrawHooked(bool *);
-
+#endif
 
 
 };
