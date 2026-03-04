@@ -89,7 +89,7 @@ public:
 
     AISVessel() : AISObject(1, 555)  //dummy for testing
     {
-        TT = TT_AIS;
+        trackType = TT_AIS;
         GUID = mmsi;
         //a123 = 1;
         //isValidAIS123 = true;
@@ -98,14 +98,14 @@ public:
 
     AISVessel(Ais1_2_3* a) : AISObject(a->message_id, a->mmsi)
     {
-        TT = TT_AIS;
+        trackType = TT_AIS;
         GUID = mmsi;
         a123 = a;
         isValidAIS123 = true;
     };
     AISVessel(Ais18* a) : AISObject(a->message_id, a->mmsi)
     {
-        TT = TT_AIS;
+        trackType = TT_AIS;
         GUID = mmsi;
         ais18 = a;
         isValidAIS18 = true;
@@ -113,7 +113,7 @@ public:
 
     AISVessel(Ais5* a) : AISObject(a->message_id, a->mmsi)
     {
-        TT = TT_AIS;
+        trackType = TT_AIS;
         GUID = mmsi;
         ais5 = a;
         isValidAIS5 = true;
@@ -121,7 +121,7 @@ public:
 
     AISVessel(Ais24* a) : AISObject(a->message_id, a->mmsi)
     {
-        TT = TT_AIS;
+        trackType = TT_AIS;
         GUID = mmsi;
         ais24 = a;
         isValidAIS24 = true;
@@ -129,7 +129,7 @@ public:
 
     AISVessel(Ais21* a) : AISObject(a->message_id, a->mmsi)
     {
-        TT = TT_AIS;
+        trackType = TT_AIS;
         GUID = mmsi;
         ais21 = a;
         isValidAIS21 = true;
@@ -137,7 +137,7 @@ public:
 
     AISVessel(Ais9* a) : AISObject(a->message_id, a->mmsi)
     {
-        TT = TT_AIS;
+        trackType = TT_AIS;
         GUID = mmsi;
         ais9 = a;
         isValidAIS9 = true;
@@ -256,10 +256,10 @@ public:
     }
 
 
-    //void Draw() override;
-    //void DrawSymbol();
-    //void TrackBlock();
-    //void DrawHooked(bool *);
+    void Draw() override;
+    void DrawSymbol();
+    void TrackBlock(int tc = 5);
+    void DrawHooked(bool *);
 
 
 
