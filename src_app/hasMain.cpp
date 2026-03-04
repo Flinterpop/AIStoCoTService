@@ -15,14 +15,55 @@
 
 #include "COTSender.h"
 #include "bg_TakMessage.h"
+#include <tchar.h>
 
 
-
-
-bool g_debug = true;
+extern int COT_MULTICAST_SEND_PORT;
+extern char COT_MULTICAST_SEND_GROUP[20];
 
 extern int NumCoTSent;
 extern std::vector<MapEntity*> m_MapEntityList;
+
+
+LPCWSTR filePath = L"c:/web_root/AISToCoT.ini";
+std::string COM_Port = "COM1";
+UINT baud = 9600;
+
+int totalAISRxCount{};
+
+int totalCoTTx{};
+
+bool g_debug = true;
+
+
+
+std::string LpwstrToString(LPWSTR szResult) {
+	if (!szResult || szResult[0] == L'\0') return "";
+
+	// 1. Calculate required buffer size
+	int size_needed = WideCharToMultiByte(CP_UTF8, 0, szResult, -1, NULL, 0, NULL, NULL);
+
+	// 2. Allocate buffer
+	std::string strTo(size_needed, 0);
+
+	// 3. Convert
+	WideCharToMultiByte(CP_UTF8, 0, szResult, -1, &strTo[0], size_needed, NULL, NULL);
+
+	// Remove null terminator if it was added
+	if (!strTo.empty() && strTo.back() == '\0') strTo.pop_back();
+
+	return strTo;
+}
+
+void WCharToChar(char* dest, const wchar_t* source) {
+	int i = 0;
+	while (source[i] != L'\0') {
+		// This cast will lose data for characters > 127
+		dest[i] = static_cast<char>(source[i]);
+		++i;
+	}
+	dest[i] = '\0'; // Null-terminate the string
+}
 
 
 
@@ -34,14 +75,70 @@ void ProcessNMEALine(std::string nmea)
 
 	AISObject* ao = AIS_PARSER::getAISObjectFromAISPayloadString(payload);
 	if (nullptr == ao) return;
+	totalAISRxCount++;
 
 	bg_TakMessage* tm = NMEA_AIS2COT::AISObjectToCoTMessage(ao);
-	if (nullptr != tm) std::string retVal = COTSENDER::SendCoTMsg(*tm);
+	if (nullptr != tm)
+	{
+		std::string retVal = COTSENDER::SendCoTMsg(*tm);
+		totalCoTTx++;
+	}
+
+}
+
+
+std::string GetIniStatus()
+{
+	std::stringstream ss{};
+	ss << std::format("COM_Port: {}\r\n", COM_Port);
+	ss << std::format("baud: {}\r\n", baud);
+	ss << std::format("CoT_Port: {}\r\n", COT_MULTICAST_SEND_PORT);
+	ss << std::format("CoT_IP: {}\r\n", COT_MULTICAST_SEND_GROUP);
+
+	return ss.str();
 
 }
 
 void StartAISandCOT()
 {
+	
+	const TCHAR* section = _T("CONFIGURATION");
+	const TCHAR* key = _T("COM_Port");
+	const TCHAR* defaultValue = _T("COM1");
+	TCHAR returnedString[256]; // Buffer to receive the string
+	DWORD bufferSize = sizeof(returnedString) / sizeof(TCHAR);
+
+	GetPrivateProfileString(section,       // Section name (e.g., "[Settings]")
+		key,           // Key name (e.g., "DatabasePath=")
+		defaultValue,  // Default value if key is not found
+		returnedString, // Buffer to fill with the value
+		bufferSize,    // Size of the buffer (in characters)
+		filePath);      // INI file path
+
+	//COM_Port = LpwstrToString(returnedString);
+
+	baud = GetPrivateProfileInt(L"CONFIGURATION", L"baud", 9600, filePath);
+
+
+	const TCHAR* _key = _T("CoT_IP");
+	const TCHAR* _defaultValue = _T("239.2.3.1");
+	GetPrivateProfileString(section,       // Section name (e.g., "[Settings]")
+		_key,           // Key name (e.g., "DatabasePath=")
+		_defaultValue,  // Default value if key is not found
+		returnedString, // Buffer to fill with the value
+		bufferSize,    // Size of the buffer (in characters)
+		filePath);      // INI file path
+
+	//WCharToChar(COT_MULTICAST_SEND_GROUP, returnedString);
+
+
+	COT_MULTICAST_SEND_PORT = GetPrivateProfileInt(L"CONFIGURATION", L"CoT_Port", 6969, filePath);
+
+	
+
+
+
+
 	initialise_winsock();
 	//getNetworkAdapterInfo();
 
@@ -61,7 +158,7 @@ void StartAISandCOT()
 
 
 	InitializeSerial();
-	retVal = OpenCOMPort("COM1", 9600);
+	retVal = OpenCOMPort(COM_Port, baud);
 	printf(retVal.c_str());
 }
 

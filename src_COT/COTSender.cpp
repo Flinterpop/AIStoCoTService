@@ -15,9 +15,10 @@
 
 static sockaddr_in COTSendSocker_addr;
 static SOCKET COT_SendSocket;
-static char COT_MULTICAST_SEND_GROUP[20] = "239.2.3.1";
+char COT_MULTICAST_SEND_GROUP[20] = "239.2.3.1";
+int COT_MULTICAST_SEND_PORT = 6969;
 
-static int COT_MULTICAST_SEND_PORT = 6969;
+
 static bool isCOTSenderRunning = false;
 
 int NumCoTSent{};

@@ -19,7 +19,6 @@ std::map <int, std::string> AIS_PARSER::MarineIDList;  //Marine Identifier D..
 int AIS_PARSER::MsgCounts[27]{};
 int AIS_PARSER::MsgFailCounts[27]{};
 
-
 bool AIS_PARSER::LoadKnownVesselList()
 {
     std::string fname = "KnownVessels.csv";
@@ -598,12 +597,3 @@ std::string AIS_PARSER::getAISPayloadFromNMEA(std::string NMEA_String)
     }
 }
 
-std::string GetAISStatus()
-{
-    std::stringstream ss{};
-    ss << std::format("KnownVesselList size: {}\r\n", (int)AIS_PARSER::KnownVesselList.size());
-    ss << std::format("MarineIDList size: {}\r\n", (int)AIS_PARSER::MarineIDList.size());
-    ss << std::format("AIS ID 1,2,3 \tCount: {}\r\n", AIS_PARSER::MsgCounts[1]);
-
-    return ss.str();
-}

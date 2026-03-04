@@ -3,9 +3,20 @@
 
 #include "mongoose.h"  
 #include <string>
+#include <format>
 
 
-std::string GetAISStatus();
+extern int COT_MULTICAST_SEND_PORT;
+extern char COT_MULTICAST_SEND_GROUP[20];
+
+extern std::string COM_Port;
+extern UINT baud;
+
+extern int totalAISRxCount;
+extern int totalCoTTx;
+
+
+std::string GetIniStatus();
 
 
 //based on webUI push
@@ -93,26 +104,54 @@ static void push(struct mg_mgr* mgr, const char* name, const void* data)
 	for (c = mgr->conns; c != NULL; c = c->next)
 	{
 		if (c->data[0] != 'W') continue;
-		mg_ws_printf(c, WEBSOCKET_OP_TEXT, "{%m:%m,%m:%m}", MG_ESC("Event"), MG_ESC(name), MG_ESC("Data"), MG_ESC(data));
+		mg_ws_printf(c, WEBSOCKET_OP_TEXT, "{%m:%m, %m:%m,%m:%m}", MG_ESC("type"), MG_ESC("ais"), MG_ESC("Event"), MG_ESC(name), MG_ESC("Data"), MG_ESC(data));
 	}
 }
 
 
-static int MMSI = 31609872;
+// Push to all watchers
+static void pushIniData(struct mg_mgr* mgr)
+{
+	struct mg_connection* c;
+	for (c = mgr->conns; c != NULL; c = c->next)
+	{
+		if (c->data[0] != 'W') continue;
+		std::string b = std::format("{}", baud);
+		std::string p = std::format("{}", COT_MULTICAST_SEND_PORT);
+		mg_ws_printf(c, WEBSOCKET_OP_TEXT, "{%m:%m,%m:%m,%m:%m,%m:%m,%m:%m}", MG_ESC("type"), MG_ESC("ini"), MG_ESC("Port"), MG_ESC(COM_Port.c_str()), MG_ESC("Baud"), MG_ESC(b.c_str()), MG_ESC("CoTIP"), MG_ESC(COT_MULTICAST_SEND_GROUP), MG_ESC("CoTPort"), MG_ESC(p.c_str()));
+
+	}
+}
+
+
+
+// Push to all watchers
+static void pushAISStatus(struct mg_mgr* mgr)
+{
+	static int hb = 0;
+	struct mg_connection* c;
+	for (c = mgr->conns; c != NULL; c = c->next)
+	{
+		if (c->data[0] != 'W') continue;
+		std::string b = std::format("{}", hb++);
+		std::string a = std::format("{}", totalAISRxCount);
+		std::string cot = std::format("{}", totalCoTTx);
+		mg_ws_printf(c, WEBSOCKET_OP_TEXT, "{%m:%m, %m:%m,%m:%m,%m:%m}", MG_ESC("type"), MG_ESC("ais"), MG_ESC("HeartBeat"), MG_ESC(b.c_str()), MG_ESC("AISRxMsgCount"), MG_ESC(a.c_str()), MG_ESC("CoTTxMsgCount"), MG_ESC(cot.c_str()));
+	}
+}
+
+
 
 static void timer_fn(void* arg)
 {
 	if (0 == connCount) return;
-	puts("Sending");
+
 	struct mg_mgr* mgr = (struct mg_mgr*)arg;
 	
-	
-	char buf[150];
-	mg_snprintf(buf, sizeof(buf), "[%d, %s , %d]", MMSI, "Canada", connCount);
-	std::string status = GetAISStatus();
+	pushIniData(mgr);
+	pushAISStatus(mgr);
 
-	push(mgr, "Rx AIS", status.c_str());
-	push(mgr, "Rx AIS", buf);
+
 }
 
 
