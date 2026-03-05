@@ -7,11 +7,26 @@
 #include "AISParser.h"
 #include "bg_TakMessage.h"
 
-
+extern std::string LOG;
 using namespace AIS_PARSER;
 
 bool b_useKnownVessleCallsign = true;
 bool b_showAtoN = true;
+
+
+std::string getCoTTypeFromSIDC(std::string SIDC)
+{
+	std::string MsgType = std::format("a-{}-S-{}-{}", SIDC[1], SIDC[4], SIDC[5]);
+	if ('-' != SIDC[6])
+	{
+		MsgType += std::format("-{}", SIDC[6]);
+		if ('-' != SIDC[7])
+		{
+			MsgType += std::format("-{}", SIDC[7]);
+		}
+	}
+	return MsgType;
+}
 
 
 namespace NMEA_AIS2COT
@@ -64,6 +79,7 @@ namespace NMEA_AIS2COT
 	}
 
 
+
 	//public function
 	inline bg_TakMessage* AISObjectToCoTMessage(AISObject* ao)
 	{
@@ -74,7 +90,9 @@ namespace NMEA_AIS2COT
 			case 1:
 			case 2:
 			case 3:
+			case 5:
 			case 18:
+			case 24:
 			{
 				tm = NMEA_AIS2COT::VesselToCoTMessage(v);
 				break;
@@ -99,8 +117,11 @@ namespace NMEA_AIS2COT
 
 	inline bg_TakMessage *VesselToCoTMessage(AISVessel* v)
 	{
+		LOG += std::format("MMSI: {}", v->mmsi);
+
 		//Class A								Class B
-		if ((false == v->isValidAIS123) && (false == v->isValidAIS18)) return nullptr;
+		//if ((false == v->isValidAIS123) && (false == v->isValidAIS18)) return nullptr;
+
 
 		bg_TakMessage *CurCoTMsg = new bg_TakMessage();
 		CurCoTMsg->IncludeTakControl = true;
@@ -121,6 +142,8 @@ namespace NMEA_AIS2COT
 
 		CurCoTMsg->tm_validTimeInSeconds = 90;
 
+
+		
 		CurCoTMsg->UID = std::format("MMSI-{}", v->mmsi);
 		CurCoTMsg->_how = getFixType(v->fix_type);
 
@@ -157,7 +180,10 @@ namespace NMEA_AIS2COT
 			else CurCoTMsg->callsign = std::format("MSSI-{}", v->mmsi);
 		}
 
+		CurCoTMsg->msg_type = getCoTTypeFromSIDC(v->SIDC);
+		CurCoTMsg->callsign = v->callsign;
 		
+		/*
 		KnownVessel *kv = AIS_PARSER::FindKnownVesselByMMSI(v->mmsi);
 		if (nullptr != kv) //it's a known vessel so use that known symbol code
 		{
@@ -167,7 +193,7 @@ namespace NMEA_AIS2COT
 		}
 		else  //determine symbol code based on AIS data (and hostility from MID data)
 		{
-			/*
+		
 			AIS Ship type - first digit
 			1 = Reserved
 			?2 = Wing In Ground
@@ -179,11 +205,11 @@ namespace NMEA_AIS2COT
 			?8 = Tanker
 			?9 = Other
 			ATAK icons ares something like  b-m-p-c-cp  for a circle (green)
-			*/
+			//
 			char hostility = GetHostilityFromMarineID(v->mmsi);  //checks country code against internal list of countries that are hostile (Russia, China for testing)
 			CurCoTMsg->msg_type = std::format("a-{}-S-X-M",hostility);
 		}
-		
+		*/
 
 		CurCoTMsg->includeDetail = true;
 		std::stringstream remarks;
@@ -197,6 +223,7 @@ namespace NMEA_AIS2COT
 		CurCoTMsg->xmlDetail = remarks.str();
 
 		CurCoTMsg->AssembleCoTPbufEvent();
+		
 		return CurCoTMsg;
 
 		//std::string retVal = COTSENDER::SendCoTMsg(CurCoTMsg);

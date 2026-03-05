@@ -5,6 +5,7 @@
 #include <string>
 #include <format>
 
+std::string LOG{"Nil"};
 
 extern int COT_MULTICAST_SEND_PORT;
 extern char COT_MULTICAST_SEND_GROUP[20];
@@ -141,6 +142,23 @@ static void pushAISStatus(struct mg_mgr* mgr)
 }
 
 
+// Push to all watchers
+static void pushLog(struct mg_mgr* mgr)
+{
+	static int hb = 0;
+	struct mg_connection* c;
+	for (c = mgr->conns; c != NULL; c = c->next)
+	{
+		if (c->data[0] != 'W') continue;
+		std::string b = std::format("{}", hb++);
+		std::string a = std::format("{}", totalAISRxCount);
+		std::string cot = std::format("{}", totalCoTTx);
+		mg_ws_printf(c, WEBSOCKET_OP_TEXT, "{%m:%m, %m:%m}", MG_ESC("type"), MG_ESC("log"), MG_ESC("Log"), MG_ESC(LOG.c_str()));
+	}
+}
+
+
+
 
 static void timer_fn(void* arg)
 {
@@ -150,7 +168,7 @@ static void timer_fn(void* arg)
 	
 	pushIniData(mgr);
 	pushAISStatus(mgr);
-
+	pushLog(mgr);
 
 }
 

@@ -39,6 +39,8 @@ public:
 
 	bool bUseImage = false;
 	std::string SIDC{};
+	std::string MsgType{}; //CoT
+
 
 
 	int hoverCheckCount{};

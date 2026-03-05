@@ -7,7 +7,9 @@
 #include <map>
 #include <filesystem>
 #include <string>
+#include <format>
 
+extern std::string LOG;
 
 #ifdef IMGUI_VERSION_NUM
 extern std::mutex mtxMapEntityList;
@@ -28,7 +30,8 @@ int AIS_PARSER::MsgFailCounts[27]{};
 
 bool AIS_PARSER::LoadKnownVesselList()
 {
-    std::string fname = "KnownVessels.csv";
+    std::string fname = "c:/web_root/KnownVessels.csv";
+    //std::string fname = "KnownVessels.csv";
 
     //Need to check for file existence..
     bool b = std::filesystem::exists(fname);
@@ -59,6 +62,7 @@ bool AIS_PARSER::LoadKnownVesselList()
             std::string shipNumber = row["ShipNumber"].get<std::string>();
             std::string SIDC = row["SIDC"].get<std::string>();
             AIS_PARSER::KnownVessel* kv = new AIS_PARSER::KnownVessel(mmsi, imo, name, callsign, type, symbol, flag, a, b, c, d, shipNumber,SIDC); //FFH-339
+
             KnownVesselList.push_back(kv);
 
         }
@@ -101,7 +105,8 @@ AIS_PARSER::KnownVessel* AIS_PARSER::FindKnownVesselByMMSI(int mmsi)
 
 bool AIS_PARSER::LoadMIDTable()
 {
-    std::string fname = "MaritimeIdentificationDigits.csv";
+    std::string fname = "c:/web_root/MaritimeIdentificationDigits.csv";
+    //std::string fname = "MaritimeIdentificationDigits.csv";
 
     //Need to check for file existence..
     bool b = std::filesystem::exists(fname);
@@ -126,6 +131,8 @@ bool AIS_PARSER::LoadMIDTable()
         //printf("Exception while loading MID List %s:%s\r\n", fname.c_str(), e.what());
         return true;
     }
+
+    LOG += std::format("LoadMIDTable, size {}", MarineIDList.size());
     return false;
 }
 
@@ -193,6 +200,8 @@ std::string getSIDC(int mmsi)
     SIDC = "SNSPXM------CAG";
 
     if (316 == (mmsi) / 1000000) SIDC = "SFSPXM------CAG";
+
+    //hostile
     if (273 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
     if (412 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
     if (413 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";

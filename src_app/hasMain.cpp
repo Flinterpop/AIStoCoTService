@@ -17,7 +17,7 @@
 #include "bg_TakMessage.h"
 #include <tchar.h>
 
-
+extern std::string LOG;
 extern int COT_MULTICAST_SEND_PORT;
 extern char COT_MULTICAST_SEND_GROUP[20];
 
@@ -67,7 +67,7 @@ void WCharToChar(char* dest, const wchar_t* source) {
 
 
 
-void ProcessNMEALine(std::string nmea)
+void ProcessNMEA_AISLine(std::string nmea)
 {
 	if (nmea.size() < 20) return;
 	std::string payload = AIS_PARSER::getAISPayloadFromNMEA(nmea);
@@ -83,6 +83,7 @@ void ProcessNMEALine(std::string nmea)
 		std::string retVal = COTSENDER::SendCoTMsg(*tm);
 		totalCoTTx++;
 	}
+	//LOG += std::format("LoadMIDTable, size {}", MarineIDList.size());
 
 }
 
@@ -148,13 +149,14 @@ void StartAISandCOT()
 	std::string retVal = COTSENDER::StartCOTSender();
 
 	
-	
+	/*
 	//TEST
 	std::vector<std::string> nmeaList;
 	nmeaList.push_back("!AIVDM,1,1,,A,1Cu?etPjh0KT>H@I;dL1hVv00000,0*57");
 	nmeaList.push_back("!AIVDM,2,1,0,A,5Cu?etP00000<L4`000<P58hEA@E@uLp0000000S>8OA;0jjf012AhV@,0*47");
 	nmeaList.push_back("!AIVDM,2,2,0,A,000000000000000,2*24");
-	for (std::string nmea : nmeaList) ProcessNMEALine(nmea);
+	for (std::string nmea : nmeaList) ProcessNMEA_AISLine(nmea);
+	*/
 
 
 	InitializeSerial();

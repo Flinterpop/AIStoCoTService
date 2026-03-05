@@ -8,7 +8,7 @@
 //#include "wx/log.h"
 
 //void parseNMEA(std::string nmea);
-void ProcessNMEALine(std::string nmea);
+void ProcessNMEA_AISLine(std::string nmea);
 
 
 //from https://github.com/itas109/CSerialPort
@@ -41,7 +41,7 @@ static bool restart = false;
 void ParseNMEAFromSerial(std::string line)
 {
     //wxLogMessage("In ParseNMEAFromSerial: %s", line.c_str());
-    ProcessNMEALine(line);
+    ProcessNMEA_AISLine(line);
 }
 
 class MySerialPortListener : public CSerialPortListener, public CSerialPortHotPlugListener
