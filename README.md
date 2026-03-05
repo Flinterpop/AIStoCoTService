@@ -7,10 +7,10 @@ Mongoose embedded webserver running as a windows server
 > [!NOTE]  
 >  Windows Services require absolute paths and the easiest way to configure this is to use an application folder in the root of the C-drive.
 
-4. run `AISToCoT -install`
+4. run `AISToCoT.exe -install`
 <img width="569" height="91" alt="image" src="https://github.com/user-attachments/assets/fd705dd3-b1e1-4b21-b740-b22b672a0e7c" />
 
-5. To remove the service run `AISToCoT -remove`
+5. To remove the service run `AISToCoT.exe -remove`
 <img width="578" height="90" alt="image" src="https://github.com/user-attachments/assets/6b9bd597-b0ff-4235-b99b-a305b73e76c6" />
 
 
