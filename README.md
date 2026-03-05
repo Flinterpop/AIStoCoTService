@@ -4,9 +4,19 @@ Mongoose embedded webserver running as a windows server
 copy web_root to the c drive
 run powershell as admin and cd to `c:/web_root`
 run `AISToCoT -install`
+<img width="569" height="91" alt="image" src="https://github.com/user-attachments/assets/fd705dd3-b1e1-4b21-b740-b22b672a0e7c" />
+
+To remove the service run `AISToCoT -remove`
+<img width="578" height="90" alt="image" src="https://github.com/user-attachments/assets/6b9bd597-b0ff-4235-b99b-a305b73e76c6" />
+
+
 Then open the windows services panel and find AIStoCOT Service
 Right click and run
 Optionally set it to auto start: `Properties -> Startup type -> Automatic`
+
+<img width="1230" height="869" alt="image" src="https://github.com/user-attachments/assets/f92e766a-4e7c-4db6-8b9a-34a018f646ba" />
+
+
 
 You can surf to `http://localhost:8500/webui.html`
 to see the status
