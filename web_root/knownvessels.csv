@@ -1,0 +1,7 @@
+MMSI,IMO,Name,CallSign,Type,Symbol,Flag,A,B,C,D,ShipNumber,SIDC
+316130000,0,"Charlettetown","CGAJ",35,"a-f-S-C-L-F-F","Canada",134,17,0,0,FFH-339,"SFSPCLFF----CAG"
+316138000,0,"Halifax","CGAP",35,"a-f-S-C-L-F-F","Canada",134,17,0,0,FFH-330,"SFSPCLFF----CAG"
+316135000,0,"Toronto","CGAD",35,"a-f-S-C-L-F-F","Canada",134,17,0,0,FFH-332,"SFSPCLFF----CAG"
+316030879,9348182,"Asterix","A8XE9",35,"a-f-S-N","Canada",183,34,0,0,,"SFSPXL------CAG"
+777220000,1,"Chicoutimi","SGVA",35,"a-f-U-S-C-A","Canada",70,8,0,0,SSK_879,"SFUPSCA-----CAG"
+316021595,9586112,"CAPTAIN GODDARD M.S.M.","CGNG",55,"a-f-S-X-L","Canada",43,7,0,0,FFH-330,"SFSPXL------CAG"
