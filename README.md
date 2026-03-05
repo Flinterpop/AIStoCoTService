@@ -52,7 +52,7 @@ The CoT Message:
 
 ### Notes
 The App determins the CoT Symbol Code based on the nationality as encoded in the first three digits of the MMSI. For example 316 is Canada.
-If a vessel is Canadian then it's symbol is friendly. If the country is in the file `web_root/hostileCountries.csv` then it is marked hostile. All others are marked Neutral. 
+If a vessel is Canadian then it's symbol is friendly. If the country is in the file `web_root/hostilitylist.csv` then it is marked hostile. All others are marked Neutral. 
 
 For testing I have designated a couple countries as Hostile.  The MMSI to country mapping is stored in `web_root/MaritimeIdentificationDigits.csv`
 
