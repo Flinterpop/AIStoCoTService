@@ -39,9 +39,25 @@ Example AIS NMEA string:
 `!AIVDM,1,1,,B,34eHKFm000o:pgBKmgq>48h40DTJ,0*6B`
 
 Result on WinTAK:
+
 <img width="799" height="655" alt="Capture" src="https://github.com/user-attachments/assets/be51f4c2-a409-4591-b6f3-2b2bfc7db981" />
 
 The CoT Message:
+
 <img width="270" height="204" alt="Capture2" src="https://github.com/user-attachments/assets/b78da5ac-27d4-4f63-9139-67199c0249b5" />
+
+### Notes
+The App determins the CoT Symbol Code based on the nationality as encoded in the first three digits of the MMSI. For example 316 is Canada.
+If a vessel is Canadian then it's symbol is friendly. If the country is not Canadian then it is Neutral. For testing I have designated a couple countries asd Hostile.  The MMSI to country mapping is stored in `web_root/MaritimeIdentificationDigits.csv`
+
+There is also a known vesel list `web_root/knownvessels.csv` based on MMSI.
+If a vessel is found in this list then the symbol code, callsign and some other values use in the CoT message are taken from this file.
+
+`web_root/knownvessels.csv` is a Comma Separated Variable file similar to the following:
+
+<img width="1585" height="228" alt="image" src="https://github.com/user-attachments/assets/7a7c0a40-75a3-4a9f-abb2-de67f1124427" />
+
+
+
 
 
