@@ -156,6 +156,7 @@ void StartAISandCOT()
 
 	LoadKnownVesselList();
 	LoadMIDTable();
+	LoadHostilityList();
 
 	std::string retVal = COTSENDER::StartCOTSender();
 

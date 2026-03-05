@@ -22,10 +22,43 @@ std::vector<MapEntity*> m_MapEntityList;
 
 //std::vector<AISVessel*> AISVesselList;
 std::vector<AIS_PARSER::KnownVessel*> AIS_PARSER::KnownVesselList;
+std::vector<int> AIS_PARSER::HostilityList;
 std::map <int, std::string> AIS_PARSER::MarineIDList;  //Marine Identifier D..
 
 int AIS_PARSER::MsgCounts[27]{};
 int AIS_PARSER::MsgFailCounts[27]{};
+
+
+bool AIS_PARSER::LoadHostilityList()
+{
+    std::string fname = "c:/web_root/hostilitylist.csv";
+
+    //Need to check for file existence..
+    bool b = std::filesystem::exists(fname);
+    if (false == b)
+    {
+        ////wxLogMessage("Not found: %s", fname.c_str());
+        printf("Not found: %s\r\n", fname.c_str());
+        return true;
+    }
+
+    csv::CSVReader reader(fname.c_str());
+    try
+    {
+        for (csv::CSVRow& row : reader)
+        {
+            int CountryCode = row["Digit"].get<int>();
+            HostilityList.push_back(CountryCode);
+            LOG += std::format("{}<br>", CountryCode);
+        }
+    }
+    catch (std::exception e)
+    {
+        return true;
+    }
+    return false;
+
+}
 
 
 bool AIS_PARSER::LoadKnownVesselList()
@@ -148,6 +181,20 @@ std::string AIS_PARSER::FindCountryFromMIDCode(int mmsi)
     return "@";  //use this to indicate no country found
 }
 
+
+/*
+char HostilityChar(std::string second)
+{
+    for (int c : AIS_PARSER::HostilityList)
+    {
+        int n = c.size();
+        if (0 == second.compare(0, n, c)) return 'h';
+    }
+    return 'u';
+       
+}
+
+
 char AIS_PARSER::GetHostilityFromMarineID(int mmsi)
 {
     int mid = mmsi / 1000000;
@@ -155,16 +202,18 @@ char AIS_PARSER::GetHostilityFromMarineID(int mmsi)
     if (it != MarineIDList.end())
     {
         if (it->second == "Canada") return 'f';
-        if (0 == it->second.compare(0, 7, "Russian")) return 'h';
-        if (0 == it->second.compare(0, 5, "China")) return 'h';
-        if (0 == it->second.compare(0, 7, "Liberia")) return 'h';
-        if (0 == it->second.compare(0, 5, "Malta")) return 'h';
+        return HostilityChar(it->second);
+
+        //if (0 == it->second.compare(0, 7, "Russian")) return 'h';
+        //if (0 == it->second.compare(0, 5, "China")) return 'h';
+        //if (0 == it->second.compare(0, 7, "Liberia")) return 'h';
+        //if (0 == it->second.compare(0, 5, "Malta")) return 'h';
 
         return 'n';
     }
     return 'u';  //not hostile so its neutral
 }
-
+*/
 
 
 
@@ -202,12 +251,17 @@ std::string getSIDC(int mmsi)
     if (316 == (mmsi) / 1000000) SIDC = "SFSPXM------CAG";
 
     //hostile
-    if (273 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
-    if (412 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
-    if (413 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
-    if (414 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
-    if (416 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
-    if (477 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
+    for (int i : AIS_PARSER::HostilityList)
+    {
+        if (i == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
+    }
+
+    //if (273 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
+    //if (412 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
+    //if (413 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
+    //if (414 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
+    //if (416 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
+    //if (477 == (mmsi) / 1000000) SIDC = "SHSPXM------CAG";
     return SIDC;
 }
 

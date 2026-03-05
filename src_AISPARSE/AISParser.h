@@ -198,12 +198,13 @@ namespace AIS_PARSER
 
 
   
+    bool LoadHostilityList();
     bool LoadKnownVesselList();
     void BuildKnownVesselList();
     bool LoadMIDTable();
 
     std::string FindCountryFromMIDCode(int mid);
-    char GetHostilityFromMarineID(int mmsi);
+    //char GetHostilityFromMarineID(int mmsi);
     KnownVessel* FindKnownVesselByMMSI(int mmsi);
 
 
@@ -222,6 +223,7 @@ namespace AIS_PARSER
     void AISSummary();
     std::string getAISPayloadFromNMEA(std::string NMEA_String);
 
+    extern std::vector<int> HostilityList;
     extern std::vector<AIS_PARSER::KnownVessel*> KnownVesselList;
     extern std::map <int, std::string> MarineIDList;  //Marine Identifier D..
 

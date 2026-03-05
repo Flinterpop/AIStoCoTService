@@ -345,7 +345,7 @@ namespace NMEA_AIS2COT
 		CurCoTMsg->includeContact = true;
 		if (v->callsign.size() > 0) CurCoTMsg->callsign = std::format("AIS{}", v->callsign);
 		else CurCoTMsg->callsign = std::format("MSSI-{}", v->mmsi);
-		char hostility = GetHostilityFromMarineID(v->mmsi);  //checks country code against internal list of countries that are hostile (Russia, China for testing)
+		char hostility = 'f';// GetHostilityFromMarineID(v->mmsi);  //checks country code against internal list of countries that are hostile (Russia, China for testing)
 		CurCoTMsg->msg_type = std::format("a-{}-A-M-F", hostility);
 
 		//CurCoTMsg->msg_type = "a-f-A-M-F-H"; //CSAR Fixed Wing
