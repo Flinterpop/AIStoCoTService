@@ -35,5 +35,9 @@ Example AIS NMEA string:
 `!AIVDM,1,1,,B,34eHKFm000o:pgBKmgq>48h40DTJ,0*6B`
 
 Result on WinTAK:
+<img width="799" height="655" alt="Capture" src="https://github.com/user-attachments/assets/be51f4c2-a409-4591-b6f3-2b2bfc7db981" />
+
+The CoT Message:
+<img width="270" height="204" alt="Capture2" src="https://github.com/user-attachments/assets/b78da5ac-27d4-4f63-9139-67199c0249b5" />
 
 
