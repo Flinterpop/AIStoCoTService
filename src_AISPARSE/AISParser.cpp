@@ -49,7 +49,7 @@ bool AIS_PARSER::LoadHostilityList()
         {
             int CountryCode = row["Digit"].get<int>();
             HostilityList.push_back(CountryCode);
-            LOG += std::format("{}<br>", CountryCode);
+            //LOG += std::format("{}<br>", CountryCode);
         }
     }
     catch (std::exception e)
