@@ -3,7 +3,9 @@ Mongoose embedded webserver running as a windows server
 
 1. copy the folder `web_root` to the c drive
 2. run powershell as admin and cd to `c:/web_root`
-  Note: Windows Services require absolute paths and the easiest way to configure this is to use an application folder in the root of the C-drive.
+
+> [!NOTE]  
+>  Windows Services require absolute paths and the easiest way to configure this is to use an application folder in the root of the C-drive.
 
 4. run `AISToCoT -install`
 <img width="569" height="91" alt="image" src="https://github.com/user-attachments/assets/fd705dd3-b1e1-4b21-b740-b22b672a0e7c" />
