@@ -30,7 +30,7 @@ to see the status
 
 ---
 ### What it does
-The service conencts to a COM Port defined in `web_root/AISToCoT.ini`
+The service connects to a COM Port defined in `web_root/AISToCoT.ini`
 for example COM1 at baud 38400 (typical for a dAISy AIS Receiver).
 It parses the AIS message and sends a CoT message on the multicast group and port also defined in `web_root/AISToCoT.ini`
 The default is 239.2.3.1: 6969
