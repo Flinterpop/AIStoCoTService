@@ -62,6 +62,8 @@ If a vessel is found in this list then the symbol code, callsign and some other 
 
 <img width="1585" height="228" alt="image" src="https://github.com/user-attachments/assets/7a7c0a40-75a3-4a9f-abb2-de67f1124427" />
 
+The information in this file comes from open source websites like this: https://www.shipspotting.com/photos/2916198?navList=gallery&mmsi=316021595&page=1&viewType=normal&sortBy=newest
+
 
 
 
