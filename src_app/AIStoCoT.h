@@ -117,7 +117,7 @@ namespace NMEA_AIS2COT
 
 	inline bg_TakMessage *VesselToCoTMessage(AISVessel* v)
 	{
-		LOG += std::format("MMSI: {}", v->mmsi);
+		//LOG += std::format("MMSI: {}", v->mmsi);
 
 		//Class A								Class B
 		//if ((false == v->isValidAIS123) && (false == v->isValidAIS18)) return nullptr;

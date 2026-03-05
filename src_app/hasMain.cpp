@@ -77,6 +77,17 @@ void ProcessNMEA_AISLine(std::string nmea)
 	if (nullptr == ao) return;
 	totalAISRxCount++;
 
+	/*
+	if (316021595 == ao->mmsi)
+	{
+		LOG += std::format("MN:{}", ao->AISMsgNumber);
+		LOG += "<br>";
+		LOG += nmea;
+		LOG += "<br>";
+	}
+	*/
+
+
 	bg_TakMessage* tm = NMEA_AIS2COT::AISObjectToCoTMessage(ao);
 	if (nullptr != tm)
 	{
