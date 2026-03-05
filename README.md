@@ -56,7 +56,7 @@ The App determins the Hostility of the CoT Symbol Code based on the nationality 
 If a vessel is Canadian then it's symbol is friendly. If the country is in the file `web_root/hostilitylist.csv` then it is marked hostile. All others are marked Neutral. For testing I have designated a couple countries as Hostile.  
 
 There is also a known vesel list `web_root/knownvessels.csv` based on MMSI.
-If a vessel is found in this list then the symbol code, callsign and some other values use in the CoT message are taken from this file.
+If a vessel is found in this list then the symbol code, callsign and some other values used in the CoT message are taken from this file.
 
 `web_root/knownvessels.csv` is a Comma Separated Variable file similar to the following:
 
