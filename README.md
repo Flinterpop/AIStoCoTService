@@ -12,6 +12,7 @@ Mongoose embedded webserver running as a windows server
 
 5. Then open the windows services panel and find AIStoCOT Service
 5a. Right click and run
+
 5b. Optionally set it to auto start: `Properties -> Startup type -> Automatic`
 
 <img width="1230" height="869" alt="image" src="https://github.com/user-attachments/assets/f92e766a-4e7c-4db6-8b9a-34a018f646ba" />
@@ -22,4 +23,17 @@ Mongoose embedded webserver running as a windows server
 to see the status
 
 <img width="1067" height="939" alt="image" src="https://github.com/user-attachments/assets/c9a34c94-04e1-4371-bd78-baa5625b1691" />
+
+---
+### What it does
+The service conencts to a COM Port defined in `web_root/AISToCoT.ini`
+for example COM1 at baud 38400 (typical for a dAISy AIS Receiver).
+It parses the AIS message and sends a CoT message on the multicast group and port also defined in `web_root/AISToCoT.ini`
+The default is 239.2.3.1: 6969
+
+Example AIS NMEA string:
+`!AIVDM,1,1,,B,34eHKFm000o:pgBKmgq>48h40DTJ,0*6B`
+
+Result on WinTAK:
+
 
