@@ -29,6 +29,13 @@ int AIS_PARSER::MsgCounts[27]{};
 int AIS_PARSER::MsgFailCounts[27]{};
 
 
+int GetNumTracks()
+{
+    return m_MapEntityList.size();
+}
+
+
+
 bool AIS_PARSER::LoadHostilityList()
 {
     std::string fname = "c:/web_root/hostilitylist.csv";

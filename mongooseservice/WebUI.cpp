@@ -18,6 +18,7 @@ extern int totalCoTTx;
 
 
 std::string GetIniStatus();
+int GetNumTracks();
 
 
 //based on webUI push
@@ -119,7 +120,7 @@ static void pushIniData(struct mg_mgr* mgr)
 		if (c->data[0] != 'W') continue;
 		std::string b = std::format("{}", baud);
 		std::string p = std::format("{}", COT_MULTICAST_SEND_PORT);
-		mg_ws_printf(c, WEBSOCKET_OP_TEXT, "{%m:%m,%m:%m,%m:%m,%m:%m,%m:%m}", MG_ESC("type"), MG_ESC("ini"), MG_ESC("Port"), MG_ESC(COM_Port.c_str()), MG_ESC("Baud"), MG_ESC(b.c_str()), MG_ESC("CoTIP"), MG_ESC(COT_MULTICAST_SEND_GROUP), MG_ESC("CoTPort"), MG_ESC(p.c_str()));
+		mg_ws_printf(c, WEBSOCKET_OP_TEXT, "{%m:%m,%m:%m, %m:%m,%m:%m,%m:%m,%m:%m}", MG_ESC("type"), MG_ESC("ini"), MG_ESC("Version"),  MG_ESC(__DATE__), MG_ESC("Port"), MG_ESC(COM_Port.c_str()), MG_ESC("Baud"), MG_ESC(b.c_str()), MG_ESC("CoTIP"), MG_ESC(COT_MULTICAST_SEND_GROUP), MG_ESC("CoTPort"), MG_ESC(p.c_str()));
 
 	}
 }
@@ -150,10 +151,10 @@ static void pushLog(struct mg_mgr* mgr)
 	for (c = mgr->conns; c != NULL; c = c->next)
 	{
 		if (c->data[0] != 'W') continue;
-		std::string b = std::format("{}", hb++);
-		std::string a = std::format("{}", totalAISRxCount);
-		std::string cot = std::format("{}", totalCoTTx);
-		mg_ws_printf(c, WEBSOCKET_OP_TEXT, "{%m:%m, %m:%m}", MG_ESC("type"), MG_ESC("log"), MG_ESC("Log"), MG_ESC(LOG.c_str()));
+		
+		std::string trackListSize = LOG + std::format(" #Trks: {}", GetNumTracks());
+
+		mg_ws_printf(c, WEBSOCKET_OP_TEXT, "{%m:%m, %m:%m}", MG_ESC("type"), MG_ESC("log"), MG_ESC("Log"), MG_ESC(trackListSize.c_str())  );
 	}
 }
 

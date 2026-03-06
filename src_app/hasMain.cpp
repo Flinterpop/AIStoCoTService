@@ -113,7 +113,7 @@ std::string GetIniStatus()
 
 void StartAISandCOT()
 {
-	
+	//Load ini vars
 	const TCHAR* section = _T("CONFIGURATION");
 	const TCHAR* key = _T("COM_Port");
 	const TCHAR* defaultValue = _T("COM1");
@@ -127,7 +127,7 @@ void StartAISandCOT()
 		bufferSize,    // Size of the buffer (in characters)
 		filePath);      // INI file path
 
-	//COM_Port = LpwstrToString(returnedString);
+	COM_Port = LpwstrToString(returnedString);
 
 	baud = GetPrivateProfileInt(L"CONFIGURATION", L"baud", 9600, filePath);
 
@@ -141,7 +141,7 @@ void StartAISandCOT()
 		bufferSize,    // Size of the buffer (in characters)
 		filePath);      // INI file path
 
-	//WCharToChar(COT_MULTICAST_SEND_GROUP, returnedString);
+	WCharToChar(COT_MULTICAST_SEND_GROUP, returnedString);
 
 
 	COT_MULTICAST_SEND_PORT = GetPrivateProfileInt(L"CONFIGURATION", L"CoT_Port", 6969, filePath);

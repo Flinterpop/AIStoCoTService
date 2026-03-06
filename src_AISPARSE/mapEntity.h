@@ -47,7 +47,7 @@ public:
 	
 	bool bShowLocateACLine = false; //when true a line from the TrackBlock to AC is shown
 
-	MapEntity(){};
+	//MapEntity();
 	
 
 
