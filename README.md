@@ -26,7 +26,7 @@ Mongoose embedded webserver running as a windows server
 6. You can surf to `http://localhost:8500/`
 to see the status
 
-<img width="1067" height="939" alt="image" src="https://github.com/user-attachments/assets/c9a34c94-04e1-4371-bd78-baa5625b1691" />
+<img width="895" height="912" alt="image" src="https://github.com/user-attachments/assets/1638ac64-d577-45cf-a109-ea21afba8e52" />
 
 ---
 ### What it does
