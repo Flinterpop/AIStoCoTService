@@ -30,11 +30,12 @@ to see the status
 
 ---
 ### What it does
-The service conencts to a COM Port defined in `web_root/AISToCoT.ini`
+The service connects to a COM Port defined in `web_root/AISToCoT.ini`
 for example COM1 at baud 38400 (typical for a dAISy AIS Receiver).
 It parses the AIS message and sends a CoT message on the multicast group and port also defined in `web_root/AISToCoT.ini`
 The default is 239.2.3.1: 6969
-Example ini file
+
+Example ini file:
 
 <img width="440" height="197" alt="image" src="https://github.com/user-attachments/assets/acca60af-13e0-4fec-aa2a-8c34a2714154" />
 
@@ -55,11 +56,17 @@ The App determins the Hostility of the CoT Symbol Code based on the nationality 
 If a vessel is Canadian then it's symbol is friendly. If the country is in the file `web_root/hostilitylist.csv` then it is marked hostile. All others are marked Neutral. For testing I have designated a couple countries as Hostile.  
 
 There is also a known vesel list `web_root/knownvessels.csv` based on MMSI.
-If a vessel is found in this list then the symbol code, callsign and some other values use in the CoT message are taken from this file.
+If a vessel is found in this list then the symbol code, callsign and some other values used in the CoT message are taken from this file.
 
 `web_root/knownvessels.csv` is a Comma Separated Variable file similar to the following:
 
 <img width="1585" height="228" alt="image" src="https://github.com/user-attachments/assets/7a7c0a40-75a3-4a9f-abb2-de67f1124427" />
+
+The information in this file comes from open source websites like this: 
+
+https://www.shipspotting.com/photos/2916198?navList=gallery&mmsi=316021595&page=1&viewType=normal&sortBy=newest
+
+
 
 
 
